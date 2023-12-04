@@ -1,0 +1,31 @@
+name: PostgreSQL Service 
+on: push
+
+jobs:
+  container-job:
+    runs-on: ubuntu-latest
+    container: node:10.18-jessie
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install migrate database
+        run: npm run migrate up
+        env:
+          POSTGRES_HOST: ${{ secrets.PGHOST_TEST }}
+          POSTGRES_PORT: ${{ secrets.PGPORT_TEST }}
