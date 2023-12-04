@@ -1,8 +1,11 @@
 name: PostgreSQL Service 
-on: push
+on: 
+  pull_request:
+    branches:
+      - master
 
 jobs:
-  container-job:
+  postgres:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -22,15 +25,13 @@ jobs:
 
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
 
       - name: Install dependencies
-        run: |
-          npm install
-          npm ci
+        run: npm install
 
       - name: Install migrate database
         run: npm run migrate up
         env:
-          POSTGRES_HOST: ${{ secrets.PGHOST_TEST }}
-          POSTGRES_PORT: ${{ secrets.PGPORT_TEST }}
+          POSTGRES_HOST: postgres
+          POSTGRES_PORT: 5432
