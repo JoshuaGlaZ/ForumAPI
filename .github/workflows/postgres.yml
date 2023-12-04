@@ -16,7 +16,7 @@ jobs:
       postgres:
         image: postgres
         env:
-          POSTGRES_PASSWORD: postgres
+          PGPASSWORD: ${{ secrets.PGPASSWORD_TEST }}
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -33,5 +33,5 @@ jobs:
       - name: Install migrate database
         run: npm run migrate up
         env:
-          POSTGRES_HOST: postgres
-          POSTGRES_PORT: 5432
+          PGHOST: ${{ secrets.PGHOST_TEST }}
+          PGPORT: ${{ secrets.PGPORT_TEST }}
