@@ -45,7 +45,7 @@ describe('GetDetailThreadUseCase', () => {
             }),
           ],
           content: 'sebuah content',
-          likeCount: 2,
+          likeCount: 0,
           is_deleted: false,
         }),
         new GetComment({
@@ -124,7 +124,7 @@ describe('GetDetailThreadUseCase', () => {
       .mockImplementation(() => Promise.resolve([
         {
           comments_id: 'comment-123',
-          likeCount: 2,
+          likeCount: 0,
         },
       ]));
 
