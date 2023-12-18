@@ -192,7 +192,9 @@ describe('/threads endpoint', () => {
       expect(responseJson.data.thread).toBeDefined();
       expect(responseJson.data.thread.comments).toHaveLength(2);
       expect(responseJson.data.thread.comments[0]).toBeDefined();
+      expect(responseJson.data.thread.comments[0].likeCount).toEqual(0);
       expect(responseJson.data.thread.comments[1]).toBeDefined();
+      expect(responseJson.data.thread.comments[1].likeCount).toEqual(0);
       expect(responseJson.data.thread.comments[1].content).toEqual('**komentar telah dihapus**');
     });
 

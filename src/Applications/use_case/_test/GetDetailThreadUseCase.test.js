@@ -5,6 +5,7 @@ const CommentRepository = require('../../../Domains/comments/CommentRepository')
 const GetDetailThreadUseCase = require('../GetDetailThreadUseCase');
 const GetReply = require('../../../Domains/replies/entities/GetReply');
 const ReplyRepository = require('../../../Domains/replies/ReplyRepository');
+const LikeRepository = require('../../../Domains/likes/LikeRepository');
 
 describe('GetDetailThreadUseCase', () => {
   /**
@@ -44,6 +45,7 @@ describe('GetDetailThreadUseCase', () => {
             }),
           ],
           content: 'sebuah content',
+          likeCount: 0,
           is_deleted: false,
         }),
         new GetComment({
@@ -52,12 +54,14 @@ describe('GetDetailThreadUseCase', () => {
           date: '2023-10-28T13:40:26.168Z',
           replies: [],
           content: 'konten test',
+          likeCount: 0,
           is_deleted: true,
         }),
       ],
     });
 
     /** creating dependency of use case */
+    const mockLikeRepository = new LikeRepository();
     const mockReplyRepository = new ReplyRepository();
     const mockCommentRepository = new CommentRepository();
     const mockThreadRepository = new ThreadRepository();
@@ -116,9 +120,17 @@ describe('GetDetailThreadUseCase', () => {
           is_deleted: true,
         },
       ]));
+    mockLikeRepository.getLikes = jest.fn()
+      .mockImplementation(() => Promise.resolve([
+        {
+          comments_id: 'comment-123',
+          likeCount: 0,
+        },
+      ]));
 
     /** creating use case instance */
     const getDetailThreadUseCase = new GetDetailThreadUseCase({
+      likeRepository: mockLikeRepository,
       replyRepository: mockReplyRepository,
       commentRepository: mockCommentRepository,
       threadRepository: mockThreadRepository,
@@ -131,6 +143,7 @@ describe('GetDetailThreadUseCase', () => {
     expect(mockThreadRepository.getDetailThread).toHaveBeenCalledWith(useCasePayload);
     expect(mockCommentRepository.getComments).toHaveBeenCalledWith(useCasePayload);
     expect(mockReplyRepository.getReplies).toHaveBeenCalledWith(useCasePayload);
+    expect(mockLikeRepository.getLikes).toHaveBeenCalledWith(useCasePayload);
     expect(getDetailThread).toStrictEqual(expectedDetailThread);
   });
 });
