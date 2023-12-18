@@ -60,7 +60,7 @@ class ReplyRepositoryPostgres extends ReplyRepository {
 
   async getReplies(threads_id) {
     const query = {
-      text: `SELECT replies.*
+      text: `SELECT replies.*, users.username
         FROM replies LEFT JOIN users ON replies.owner = users.id WHERE replies.threads_id = $1
         ORDER BY replies.date ASC `,
       values: [threads_id],
