@@ -17,6 +17,7 @@ describe('Comments Entity', () => {
       date: '2023-10-28T13:40:26.168Z',
       replies: 123,
       content: {},
+      likeCount: true,
       is_deleted: false,
     };
 
@@ -45,11 +46,12 @@ describe('Comments Entity', () => {
         is_deleted: true,
       }],
       content: 'sebuah content',
+      likeCount: 0,
       is_deleted: false,
     };
 
     // Action
-    const { id, username, date, replies, content } = new GetComment(payload);
+    const { id, username, date, replies, content, likeCount } = new GetComment(payload);
 
     // Assert
     expect(id).toEqual(payload.id);
@@ -57,6 +59,7 @@ describe('Comments Entity', () => {
     expect(date).toEqual(payload.date);
     expect(replies).toEqual(payload.replies);
     expect(content).toEqual(payload.content);
+    expect(likeCount).toEqual(payload.likeCount);
   });
 
   it('should create comments object correctly when value is_deleted is true', () => {
@@ -80,11 +83,12 @@ describe('Comments Entity', () => {
         is_deleted: true,
       }],
       content: 'sebuah content',
+      likeCount: 0,
       is_deleted: true,
     };
 
     // Action
-    const { id, username, date, replies, content } = new GetComment(payload);
+    const { id, username, date, replies, content, likeCount } = new GetComment(payload);
 
     // Assert
     expect(id).toEqual(payload.id);
@@ -92,5 +96,6 @@ describe('Comments Entity', () => {
     expect(date).toEqual(payload.date);
     expect(replies).toEqual(payload.replies);
     expect(content).toEqual('**komentar telah dihapus**');
+    expect(likeCount).toEqual(payload.likeCount);
   });
 });
